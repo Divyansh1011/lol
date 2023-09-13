@@ -1,0 +1,452 @@
+Overview of ReactJS:
+-It is an open source javascript library for building SPA user-ingterfaces that runs on browser and smart phones.
+-It is developed by Facebook.
+-It can be used for base simple applications but for complex applications usually require the use additional libraries for state management, routing and interaction with WEB API.
+-You can say react is "V" part of MVC.
+-The basic building block of react application is component.
+
+-A component is more like a user-define html element that is made up of combination of strict html elements and other components.
+
+-A component can be created either using a class generally known as stateful componens or as a function that is called as stateless components.
+
+syntax example for Statefull component:
+	import React, {Component} from 'react';
+	class HelloWorld extends Component
+	{
+		//....
+	}
+
+
+syntax example for Stateless component:
+	const HelloWorld=(props)=>{
+		//....
+		return null;
+	}
+
+
+Note: If it is a class component, it must define a function called "render()".
+	class HelloWorld extends Component{
+		render(){
+			return
+			<div>
+				<h1>Hello World!!!</h1>
+				<hr/>
+				<p>React is awesome :) </p>
+			</div>
+		}
+	}
+
+same thing applies to the stateless component as well"
+	const HelloWorld =(props)=>{
+		return  <div>
+				<h1>Hello World!!!</h1>
+				<hr/>
+				<p>React is awesome :) </p>
+			</div>
+
+	}
+
+
+============Creating a new ReactJS application================
+-goto the command prompt and in ur folder, give the following command
+	npx create-react-app react-demo-1
+it will take some time to download necessary packages and create application.
+	usually 3 of them are react, react-dom and react-scripts
+
+
+Once application is created, u need to go inside the app folder:
+	cd react-demo-1
+and type the command:
+	npm start
+This will start the development server and opne localhost:3000 in your browser.
+
+If u see the application folder react-demo-1,
+under public 
+
+*we can use variables inside components.
+
+* Though we use html tags but it follows xml strict syntax rules.
+	-there must be only one root element 
+	-it is case-sensitive
+	-all attribute's values must be properly quoted
+	-all tags must be closed properly
+
+
+* to add css to the component
+	-create a .css file with the style class etc
+	-import the .css file in the component file
+	-use the css defined in the tags of component
+
+
+-------------using Props--------------------
+*It is a way of passing data to the components
+*if it is a class components then props is by default available
+*if it is a function component then we need accept the props as an argument to the function 
+
+==============install bootstrap library in React JS=====================
+give the command in terminal:
+		npm i bootstrap 
+It will install the bootstrap library under node_modules
+To use this in ur application, import the bootstrap.css file in index.js file
+	import 'bootstrap/dist/css/bootstrap.css';
+
+ 
+==================handling events in React JS===============
+export default class AppContent extends Component{
+
+    btnHandler=()=>{
+        console.log('Button 1 is clicked');
+        }
+
+    render(){
+        return(
+            <div>
+                <button 
+			className="btn btn-primary" 
+			onClick={this.btnHandler} >Button 1</button>
+           </div>
+        )
+    }
+}
+
+=================using State in Stateful component===================
+
+In class component , there is in-built state object is present used to maintain the state of component data.
+What is significance of using state object?
+Whenever state value is modified, the render() automatically get's called hence re-rendering of component UI happens automatically whenever state is changed.
+
+Note: State data should not be updated using assignment statement rather we must use setState() method to update the state data else it won't call the render() again on state change.
+
+======
+Props are read-only object and cannot be modified. It is immutable.
+State objects are also available in statefull class component which are mutatble.
+*State object is not available in function component directly.
+
+Passing data from child component to parent:-
+-we use event handler function as props to send to child and child can invoke the parent function and communicate data. 
+
+--parent.js
+export default class Parent extends Component{
+	
+	state={'msg':''};
+
+	updateMsg=(msg)=>{
+		this.setState({'msg':msg});
+	}
+
+	render(){
+		return(
+			<div>
+			<h3>Message:{this.state.msg}</h3>
+			<Child updateMsg={this.updateMsg} />
+			</div>
+		)
+	}
+
+}
+
+--child.js
+export default function Child(props){
+	function sendData(){
+		props.updateMsg("This is message from child to parent");
+	}
+	return(
+		<div>
+		<label>Enter msg:</label>
+		<input type="text" />
+		<input type="button" 
+			className="btn btn-success" 
+			value="SendData" onClick="{sendData}"/>
+		</div>
+	)
+}
+
+=============Working with forms and using "refs" collection=====================
+There are two different ways for accessing data from an html form in a react component.
+
+1) Uncontrolled components: These components have a html form and the data is accessed using "refs"
+2) Controlled components: will have component's state bound directly with the html forms.
+
+Note: Though it is a class component, it does not have control over the state of the form so it is called uncontrolled component.
+
+
+============Controlled components===============
+Typically form elements line input, textarea, radio/checkbox etc maintain their own state.
+In react a component maintains its own stat. We combine these two by making react state a single source of data then react component renders teh form, also controlls what happens when there is an input in html elements.
+
+Such input element whose value is controlled by react is now called controlled components.
+
+=======================Working with List data in React JS==========================
+--displaying list of contacts example
+
+const ContactCard =({contact})=>{
+	return(
+		<div className="card" 
+			style={{width:'400px',padding:'10px',marging:'10px'}}>
+		<div className="row">
+			<div className='col-md-4'>
+			<img src={contact.picture} width='100px' height='100px' 
+				className='card-img' />
+			</div>
+			<div className='col-md-8'>
+			<div className='card-body'>
+				<h5 className="card-title">{contact.name}</h5>
+				<div className="card-text">{contact.email}</div>
+				<div className="card-text">{contact.phone}</div>
+			</div>
+			</div>
+		
+		</div>
+		</div>
+	)
+
+}
+export default ContactCard;
+
+
+
+-------------define the list of contacts component-------------------------------
+
+
+	import ContactCard from 'ContactCard';
+	const ContactList =({contacts})=>{
+	
+		return (
+			contacts.map(c=><ContactCard key={c.id} contact={c} />)
+		);
+	}
+
+	export default ContactList;
+
+====================Routing in React(SPA)=========================
+*install the package: npm i react-router-dom
+two types of routes : 
+	HashRouter ---navigates using #
+	BrowserRouter ---navigates using /
+*import { Link, BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+
+*define the Routes collection 
+*navigate using <Link to="/path">Go here</Link>
+
+<Router>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-4'>
+              <ul className='list-group'>
+                <li className='list-group-item'>
+                  <Link to="/Home">Home</Link>
+                </li>
+                <li className='list-group-item'>
+                  <Link to="/view-all-contacts"> View all contacts</Link>
+                </li>                
+              </ul>
+            </div>
+            <div className='col-md-8'>
+              <Routes>
+                <Route path="/" element={<ContactCard contact={contact}/>} exact="true" />
+                <Route path="/Home" element={<ContactCard contact={contact} />} />
+                <Route path="/view-all-contacts" element={<ContactList contacts={contacts}/>} />
+              </Routes>
+            </div>
+          </div>
+        </div>  
+      </Router>
+
+
+
+=====================Lifecycle methods of a React Component=========================
+* Lifecycle methods are there only for statefull components and are not for function components.
+*life of a component is divided into 3 different stages:
+
+1) Mounting stage:- In this stage the component is instantiated and it is rendered into the real DOM and there few functions get executed during this stage:-
+	a) constructor
+	b) getDerivedStateFromProps will execute which will have access to the props coming from parent as well the default state of the component.
+
+	c) then the render() function is called which is responsible for building the virtual DOM tree based on the data available in state and props.
+	d) once render is completed, react will compare the virtual DOM with real DOM and if any change is there it will update the real DOM using virtual DOM.
+	e) Once the real DOM is ready, the componentDidMount() will be executed.
+
+2) Update stage:- This is called whenever the component is updated and re-rendering is done.
+	a) getDerivedStateFromProps():- in this state values can be updated using props coming from parent instead of doing it in constructor.
+	b) shouldComponentUpdate():- this static method is called and decides whether to return true or false based on state change values. We can control the logic to return true or false.
+	c) based on return value as true or false, render() method is called to update virtual DOM using state updated values.
+	d) getSnapShotBeforeUpdate(): this method is called to compare the previous virtual DOM snapshot before updating it. If changes are found the current virtual DOM is modified using snapshot virtual DOM. Notice till here real DOM is untouched.
+	e) componentDidUpdate():- it is called to udate the real DOM using virtual updated DOM.
+
+
+3) Unmounting stage:- It is called when component is removed (not hidden) from the DOM tree. Normally used for some clearing ending task like network connection wrapping etc. It has only one method to be called
+	a)  componentWillUnmount()
+
+
+====================React Hooks=======================
+These are just javascript reusable functions that we can use to isolate the reusable part from a functional component.
+Hooks can bbe stateful also anc can manage side-effects.
+
+imp:- Hooks are used only in funcyional components.
+
+There are many in-built hooks:
+a) useState: To manage states. It returns a stateful value and an updater function to update it.
+	state={ count:0};
+	
+	-to update 
+	this.state.setState({count:this.state.count+1});
+
+	same thing using useState hook can be done as :
+	import {useState} from 'react';
+	
+	const [count,increment]=useState(0);
+
+
+code example:---------
+import { useState } from "react";
+
+const UseStateDemo=()=>{
+
+    const [count,increment]=useState(0);
+
+    function updateCounter(){
+        increment(count+1);
+    }
+
+    return(
+        <div className="container">
+            <h3>using useState Hook-{count}</h3>
+            <input type="button" onClick={updateCounter} value="Update Counter" />
+        </div>
+    )
+}
+
+export default UseStateDemo;
+
+b) useEffect(callbacks,[]):- This hook calls the render methid of the component only once and repeats if the array [] which is passed as a second argument is updated. So to avoid infinit loop, make sure the array argument is not modified againn else it will again and again call render method.
+Second argumemt array in the useEffect is called dependency object on which useEffect depends.
+
+
+========================Calling WEB API in React JS component=====================
+	
+There are two common ways to call web api:
+1) using javascript FETCH method
+
+2) using library AXIOS, we need install this to use it.
+	-install the axios library first : npm i axios --save
+	-import axios from "axios"
+
+	-send API calls requests for CRUD operations
+
+---1) POST request:
+axios.post(baseUrl,{
+            name:'Ravi',
+            email:'ravi@gmail.com',
+            phone:'1234567890',
+            picture:'1.jpg'
+        }).then(response=>{
+            setContacts(response.data);
+        });
+
+---2) GET request:
+ axios.get(baseUrl).then(response => { 
+            setContacts(response.data);
+            console.log('useEffect'); 
+        });
+
+
+
+
+
+using fetch method: to send GET request
+=========================================
+const URL ="https://jsonplaceholder.typicode.com/todos";
+
+const Options={
+	method:"GET",
+	headers:{
+		Accept:"application/json",
+		ContentType:"application/json"
+	}
+};
+
+fetch(URL,Options).then((response)=>response.json()).then (data=>{console.log(data);})
+
+
+using fetch methd to send POST request:
+========================================
+URL ="https://jsonplaceholder.typicode.com/todos";
+
+Options={
+	method:"POST",
+	headers:{
+		Accept:"application/json",
+		ContentType:"application/json;charset=UTF-8",
+	body:JSON.stringify({a:10,b:20})
+	}
+};
+
+using fetch methd to send DELETE request:
+========================================
+fetch("http://localhost:4300/api/contacts/" + id,
+            {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then((data) => {
+                alert('Record deleted for id:' + data.id);
+                this.refresh();
+            });
+
+
+fetch(Url,Options).then(response=>response.json()).then(data=>{console.log(data);});
+
+
+
+======================form validations in React JS============================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
